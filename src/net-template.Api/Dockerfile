@@ -5,10 +5,10 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["net-template.Api.csproj", "."]
-RUN dotnet restore "./net-template.Api.csproj"
+COPY ["src/net-template.Api/net-template.Api.csproj", "src/net-template.Api/"]
+RUN dotnet restore "src/net-template.Api/net-template.Api.csproj"
 COPY . .
-WORKDIR "/src/."
+WORKDIR "/src/src/net-template.Api"
 RUN dotnet build "net-template.Api.csproj" -c Release -o /app/build
 
 FROM build AS publish
@@ -18,3 +18,4 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "net-template.Api.dll"]
+
